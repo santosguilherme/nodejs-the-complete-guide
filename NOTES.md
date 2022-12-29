@@ -13,3 +13,5 @@ Useful resources:
 ## DBs
 - Node MySQL2: Learn more about the Node MySQL Package: https://github.com/sidorares/node-mysql2
 - Sequelize: Official Docs: http://docs.sequelizejs.com/
+- MongoDB NodeJS Driver: https://github.com/mongodb/node-mongodb-native
+- Mongoose Official Docs: https://mongoosejs.com/docs/

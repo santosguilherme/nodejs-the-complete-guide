@@ -10,9 +10,8 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     const {title, imageUrl, description, price} = req.body;
-    const userId = req.user._id;
 
-    new Product(title, price, description, imageUrl, null, userId)
+    new Product({title, price, description, imageUrl, userId: req.user})
         .save()
         .then(() => {
             res.redirect('/admin/products');
@@ -46,16 +45,24 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
     const {_id, title, imageUrl, description, price} = req.body;
 
-    new Product(title, price, description, imageUrl, _id)
-        .save()
-        .then((result) => {
+    Product.findById(_id)
+        .then(product => {
+            product.set({
+                title, imageUrl, description, price
+            });
+
+            return product.save();
+        })
+        .then(() => {
             res.redirect('/admin/products');
         })
         .catch(console.error);
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.find()
+        // .select('title price -_id') // Return the selected fields
+        // .populate('userId', 'name') // Populate the embedded objects
         .then((products) => {
             res.render('admin/products', {
                 products,
@@ -69,7 +76,7 @@ exports.getProducts = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
     const {id} = req.body;
 
-    Product.deleteById(id)
+    Product.findByIdAndRemove(id)
         .then(() => {
             res.redirect('/admin/products');
         })
