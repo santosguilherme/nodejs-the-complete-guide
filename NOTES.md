@@ -15,3 +15,6 @@ Useful resources:
 - Sequelize: Official Docs: http://docs.sequelizejs.com/
 - MongoDB NodeJS Driver: https://github.com/mongodb/node-mongodb-native
 - Mongoose Official Docs: https://mongoosejs.com/docs/
+
+## Sessions
+- Express-session Official Docs: https://github.com/expressjs/session

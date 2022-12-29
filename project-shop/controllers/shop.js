@@ -7,7 +7,8 @@ exports.getProducts = (req, res, next) => {
             res.render('shop/product-list', {
                 products,
                 pageTitle: "All products",
-                path: "/products"
+                path: "/products",
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(console.error);
@@ -21,7 +22,8 @@ exports.getProduct = (req, res, next) => {
             res.render('shop/product-detail', {
                 product,
                 pageTitle: "Product Details | " + product.title,
-                path: "/products"
+                path: "/products",
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(console.error);
@@ -33,7 +35,8 @@ exports.getIndex = (req, res, next) => {
             res.render('shop/index', {
                 products,
                 pageTitle: "Shop",
-                path: "/"
+                path: "/",
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(console.error);
@@ -47,7 +50,8 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 pageTitle: "Your cart",
                 path: "/cart",
-                products: user.cart.items
+                products: user.cart.items,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(console.error);
@@ -83,7 +87,8 @@ exports.getOrders = (req, res, next) => {
             res.render('shop/orders', {
                 pageTitle: "Your orders",
                 path: "/orders",
-                orders
+                orders,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(console.error);
@@ -94,7 +99,6 @@ exports.postOrder = (req, res, next) => {
     req.user
         .populate('cart.items.productId')
         .then(user => {
-            console.log(req.user);
             const order = new Order({
                 user: {
                     name: req.user.name,
@@ -117,11 +121,4 @@ exports.postOrder = (req, res, next) => {
             res.redirect('/orders');
         })
         .catch(console.error);
-};
-
-exports.getCheckout = (req, res, next) => {
-    res.render('shop/checkout', {
-        pageTitle: "Your cart",
-        path: "/checkout"
-    });
 };
