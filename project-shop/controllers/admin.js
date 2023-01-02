@@ -47,20 +47,24 @@ exports.postEditProduct = (req, res, next) => {
 
     Product.findById(_id)
         .then(product => {
+            if (product.userId.toString() !== req.user._id.toString()) {
+                return res.redirect('/admin/products');
+            }
+
             product.set({
                 title, imageUrl, description, price
             });
 
-            return product.save();
-        })
-        .then(() => {
-            res.redirect('/admin/products');
+            return product.save()
+                .then(() => {
+                    res.redirect('/admin/products');
+                });
         })
         .catch(console.error);
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.find()
+    Product.find({userId: req.user._id})
         // .select('title price -_id') // Return the selected fields
         // .populate('userId', 'name') // Populate the embedded objects
         .then((products) => {
@@ -76,7 +80,7 @@ exports.getProducts = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
     const {id} = req.body;
 
-    Product.findByIdAndRemove(id)
+    Product.deleteOne({_id: id, userId: req.user._id})
         .then(() => {
             res.redirect('/admin/products');
         })

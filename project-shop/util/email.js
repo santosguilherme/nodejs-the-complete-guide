@@ -8,6 +8,10 @@ const transporter = nodemailer.createTransport(sendGridTransport({
 }));
 
 
-module.exports = params => {
-    return transporter.sendEmail(params);
+module.exports = (params = {}) => {
+    console.log("Sending email", params);
+    return transporter.sendMail({
+        from: 'shop@nodejs-project.com',
+        ...params
+    });
 };

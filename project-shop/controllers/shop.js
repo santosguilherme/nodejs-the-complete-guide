@@ -3,6 +3,7 @@ const Order = require("../models/order");
 
 exports.getProducts = (req, res, next) => {
     Product.find()
+        .populate('userId')
         .then((products) => {
             res.render('shop/product-list', {
                 products,
@@ -17,6 +18,7 @@ exports.getProduct = (req, res, next) => {
     const {productId} = req.params;
 
     Product.findById(productId)
+        .populate('userId')
         .then((product) => {
             res.render('shop/product-detail', {
                 product,
@@ -29,7 +31,9 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
     Product.find()
+        .populate('userId')
         .then((products) => {
+            console.log({products});
             res.render('shop/index', {
                 products,
                 pageTitle: "Shop",

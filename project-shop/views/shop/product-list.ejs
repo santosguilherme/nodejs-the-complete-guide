@@ -25,6 +25,9 @@
                         <p class="product__description">
                             <%= product.description %>
                         </p>
+                        <p class="product__description">
+                            <small>By <%= product.userId.email %></small>
+                        </p>
                     </div>
                     <div class="card__actions">
                         <a class="btn" href="/products/<%= product._id %>">Details</a>
