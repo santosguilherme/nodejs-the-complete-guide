@@ -35,7 +35,24 @@ exports.postAddProduct = (req, res, next) => {
         .then(() => {
             res.redirect('/admin/products');
         })
-        .catch(console.error);
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+
+            // return res.redirect('/500');
+
+            // return res.status(500).render('admin/edit-product', {
+            //     pageTitle: "Add Product",
+            //     path: '/admin/add-product',
+            //     editing: false,
+            //     hasError: true,
+            //     product: {title, imageUrl, description, price},
+            //     errorMessage: 'An error occurred while creating a product, try again!',
+            //     validationErrors: []
+            // });
+        });
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -61,7 +78,12 @@ exports.getEditProduct = (req, res, next) => {
                 validationErrors: []
             });
         })
-        .catch(console.error);
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+        });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -96,7 +118,12 @@ exports.postEditProduct = (req, res, next) => {
                     res.redirect('/admin/products');
                 });
         })
-        .catch(console.error);
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+        });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -110,7 +137,12 @@ exports.getProducts = (req, res, next) => {
                 path: "/admin/products"
             });
         })
-        .catch(console.error);
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+        });
 };
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -120,5 +152,10 @@ exports.postDeleteProduct = (req, res, next) => {
         .then(() => {
             res.redirect('/admin/products');
         })
-        .catch(console.error);
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+        });
 };

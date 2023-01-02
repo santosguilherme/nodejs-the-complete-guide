@@ -61,3 +61,7 @@ And most importantly, the general principle explained in this course is package 
 
 - Express-Validator Docs: https://express-validator.github.io/docs/
 - Validator.js (which is used behind the scenes) Docs: https://github.com/chriso/validator.js
+
+## Error Handling
+
+https://httpstatuses.com/
