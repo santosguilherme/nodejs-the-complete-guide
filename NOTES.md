@@ -25,8 +25,11 @@ Useful resources:
 - Express-session Official Docs: https://github.com/expressjs/session
 
 ## Security
+### Password 
+- Bcrypt Official Docs: https://github.com/dcodeIO/bcrypt.js
 
 ### CSRF
+https://www.acunetix.com/websitesecurity/csrf-attacks/
 
 #### csurf() Alternatives
 
