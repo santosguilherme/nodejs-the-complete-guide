@@ -1,3 +1,5 @@
+const bcryptjs = require("bcryptjs");
+
 const User = require("../models/user");
 
 exports.getLogin = (req, res, next) => {
@@ -8,21 +10,80 @@ exports.getLogin = (req, res, next) => {
     });
 };
 
+exports.getSignup = (req, res, next) => {
+    res.render('auth/signup', {
+        path: '/signuo',
+        pageTitle: 'Signup',
+        isAuthenticated: false
+    });
+};
+
 exports.postLogin = (req, res, next) => {
+    const {email, password} = req.body;
+
     User
-        .findById('63ad732e5e37255d046c260c')
+        .findOne({email})
         .then(user => {
-            req.session.user = user;
-            req.session.isLoggedIn = true;
+            if (!user) {
+                return res.redirect("/login");
+            }
 
-            req.session.save(error => {
-                // waits the update of the session on the DB
-                if (error) {
-                    console.error(error);
-                }
+            return bcryptjs
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (!doMatch) {
+                        return res.redirect('/login');
+                    }
 
-                res.redirect('/');
-            });
+                    req.session.user = user;
+                    req.session.isLoggedIn = true;
+
+                    return req.session.save(error => {
+                        // waits the update of the session on the DB
+                        if (error) {
+                            console.error(error);
+                        }
+
+                        res.redirect('/');
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+
+                    res.redirect("/login");
+                });
+        })
+        .catch(console.error);
+};
+
+exports.postSignup = (req, res, next) => {
+    const {email, password, confirmPassword} = req.body;
+
+    if (!email || !password || password !== confirmPassword) {
+        // return res.redirect('/signup');
+        console.log({email, password, confirmPassword});
+    }
+
+    User.findOne({email})
+        .then(existingUser => {
+            if (existingUser) {
+                return res.redirect('/signup');
+            }
+
+            return bcryptjs
+                .hash(password, 12)
+                .then(hashedPassword => {
+                    const user = new User({
+                        email,
+                        password: hashedPassword,
+                        cart: {items: []}
+                    });
+
+                    return user.save();
+                })
+                .then(() => {
+                    res.redirect("/login");
+                });
         })
         .catch(console.error);
 };

@@ -35,8 +35,7 @@ exports.getIndex = (req, res, next) => {
             res.render('shop/index', {
                 products,
                 pageTitle: "Shop",
-                path: "/",
-                isAuthenticated: req.session.isLoggedIn
+                path: "/"
             });
         })
         .catch(console.error);
@@ -101,7 +100,7 @@ exports.postOrder = (req, res, next) => {
         .then(user => {
             const order = new Order({
                 user: {
-                    name: req.user.name,
+                    email: req.user.email,
                     userId: req.user
                 },
                 products: user.cart.items.map(cartItem => ({

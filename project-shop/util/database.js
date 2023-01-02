@@ -5,5 +5,4 @@ const DB_URI = `mongodb+srv://root:${DB_PASSWORD}@cluster0.wjkaoqo.mongodb.net/n
 
 const mongooseConnection = mongoose.connect(DB_URI);
 
-
 module.exports = {mongooseConnection, DB_URI};
