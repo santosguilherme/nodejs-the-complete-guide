@@ -56,3 +56,8 @@ And most importantly, the general principle explained in this course is package 
 
 - Nodemailer Official Docs: https://nodemailer.com/about/
 - SendGrid Official Docs: https://sendgrid.com/docs/
+
+## Validation
+
+- Express-Validator Docs: https://express-validator.github.io/docs/
+- Validator.js (which is used behind the scenes) Docs: https://github.com/chriso/validator.js
