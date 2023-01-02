@@ -25,10 +25,13 @@ Useful resources:
 - Express-session Official Docs: https://github.com/expressjs/session
 
 ## Security
-### Password 
+
+### Password
+
 - Bcrypt Official Docs: https://github.com/dcodeIO/bcrypt.js
 
 ### CSRF
+
 https://www.acunetix.com/websitesecurity/csrf-attacks/
 
 #### csurf() Alternatives
@@ -48,3 +51,8 @@ Please understand that support in this course currently still focuses on the csu
 and code snapshots.
 
 And most importantly, the general principle explained in this course is package independent.
+
+## Emails
+
+- Nodemailer Official Docs: https://nodemailer.com/about/
+- SendGrid Official Docs: https://sendgrid.com/docs/

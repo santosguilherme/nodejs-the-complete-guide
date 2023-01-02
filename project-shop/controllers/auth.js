@@ -1,6 +1,7 @@
 const bcryptjs = require("bcryptjs");
 
 const User = require("../models/user");
+const sendEmail = require("../util/email");
 
 exports.getLogin = (req, res, next) => {
     const errorMessages = req.flash('error');
@@ -90,6 +91,13 @@ exports.postSignup = (req, res, next) => {
                 })
                 .then(() => {
                     res.redirect("/login");
+
+                    return sendEmail({
+                        to: email,
+                        from: 'shop@nodejs-project.com',
+                        subject: 'Signup succeeded!',
+                        html: `<h1>You successfully signed up!</h1>`
+                    });
                 });
         })
         .catch(console.error);
