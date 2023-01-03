@@ -11,9 +11,9 @@ const validationRulesProduct = [
         .isString()
         .isLength({min: 3})
         .trim(),
-    body('imageUrl', 'Insert a valid image URL')
-        .isURL()
-        .trim(),
+    // body('imageUrl', 'Insert a valid image URL')
+    //     .isURL()
+    //     .trim(),
     body('price', 'Insert a valid price')
         .isFloat(),
     body('description', 'Insert a valid description')
