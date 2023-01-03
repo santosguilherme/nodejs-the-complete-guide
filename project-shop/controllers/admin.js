@@ -1,6 +1,7 @@
 const {validationResult} = require('express-validator/check');
 
 const Product = require("../models/product");
+const fileUtils = require("../util/file");
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -16,7 +17,7 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const {title, description, price} = req.body;
     const image = req.file;
-    console.log(req.file)
+
     if (!image) {
         return res.status(422).render('admin/edit-product', {
             pageTitle: "Add Product",
@@ -53,18 +54,6 @@ exports.postAddProduct = (req, res, next) => {
             err.statusCode = 500;
 
             return next(err);
-
-            // return res.redirect('/500');
-
-            // return res.status(500).render('admin/edit-product', {
-            //     pageTitle: "Add Product",
-            //     path: '/admin/add-product',
-            //     editing: false,
-            //     hasError: true,
-            //     product: {title, imageUrl, description, price},
-            //     errorMessage: 'An error occurred while creating a product, try again!',
-            //     validationErrors: []
-            // });
         });
 };
 
@@ -128,6 +117,8 @@ exports.postEditProduct = (req, res, next) => {
             });
 
             if (image) {
+                fileUtils.deleteFile(product.imageUrl);
+
                 product.imageUrl = image.path;
             }
 
@@ -166,7 +157,16 @@ exports.getProducts = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
     const {id} = req.body;
 
-    Product.deleteOne({_id: id, userId: req.user._id})
+    Product.findById(id)
+        .then(product => {
+            if (!product) {
+                return next(new Error('Product not found!'));
+            }
+
+            fileUtils.deleteFile(product.imageUrl);
+
+            return Product.deleteOne({_id: id, userId: req.user._id});
+        })
         .then(() => {
             res.redirect('/admin/products');
         })

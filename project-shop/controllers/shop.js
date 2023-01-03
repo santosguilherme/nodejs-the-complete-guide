@@ -1,3 +1,8 @@
+const fs = require("fs");
+const path = require("path");
+
+const PDFDocument = require("pdfkit");
+
 const Product = require("../models/product");
 const Order = require("../models/order");
 
@@ -152,6 +157,66 @@ exports.postOrder = (req, res, next) => {
         })
         .then(() => {
             res.redirect('/orders');
+        })
+        .catch((error) => {
+            const err = new Error(error);
+            err.statusCode = 500;
+
+            return next(err);
+        });
+};
+
+exports.getInvoice = (req, res, next) => {
+    const {orderId} = req.params;
+
+    Order.findById(orderId)
+        .then(order => {
+            if (!order) {
+                return next(new Error('No order found!'));
+            }
+
+            if (order.user.userId.toString() !== req.user._id.toString()) {
+                return next(new Error('Unauthorized!'));
+            }
+
+            const invoiceFileName = `invoice-${orderId}.pdf`;
+            const invoiceFilePath = path.join('data', 'invoices', invoiceFileName);
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `inline; filename="${invoiceFileName}"`);
+
+            const invoicePDF = new PDFDocument();
+            invoicePDF.pipe(fs.createWriteStream(invoiceFilePath));
+            invoicePDF.pipe(res);
+
+            invoicePDF
+                .fontSize(26)
+                .text('Invoice', {
+                    underline: false
+                });
+
+            invoicePDF
+                .fontSize(14)
+                .text('----------------------------');
+
+            let totalPrice = 0;
+            order.products.forEach(({product, quantity}) => {
+                totalPrice = totalPrice + (quantity * product.price);
+
+                invoicePDF
+                    .fontSize(14)
+                    .text(`${product.title} (${quantity}x) - $${product.price}`);
+            });
+
+            invoicePDF
+                .fontSize(14)
+                .text('----------------------------');
+
+            invoicePDF
+                .fontSize(18)
+                .text(`Total price: $${totalPrice}`);
+
+            invoicePDF.end();
         })
         .catch((error) => {
             const err = new Error(error);

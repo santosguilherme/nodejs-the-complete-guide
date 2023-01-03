@@ -6,17 +6,21 @@
 <%- include('../includes/navigation.ejs') %>
 <main>
     <% if (orders.length > 0)  { %>
+        <h1 class="orders__title">Orders</h1>
         <ul class="orders">
             <% orders.forEach(order =>  { %>
                 <li class="orders__item">
-                    <h1>Order # <%= order._id %></h1>
+                    <h2>#<%= order._id %></h2>
                     <ul class="orders__products">
                         <% order.products.forEach(orderItem =>  { %>
                             <li class="orders__products-item">
-                                <span><%= orderItem.quantity %>x - <%= orderItem.product.title %></span>
+                                <span><%= orderItem.product.title %> <small>(<%= orderItem.quantity %>x)</small> | $<%= orderItem.product.price %> <small>(un)</small></span>
                             </li>
                         <% }) %>
                     </ul>
+                    <div class="orders__actions">
+                        <a class="btn" href="/orders/<%= order._id %>">Download Invoice</a>
+                    </div>
                 </li>
             <% }) %>
         </ul>
