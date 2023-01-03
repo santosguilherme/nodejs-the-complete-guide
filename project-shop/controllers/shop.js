@@ -6,15 +6,35 @@ const PDFDocument = require("pdfkit");
 const Product = require("../models/product");
 const Order = require("../models/order");
 
+const ITEMS_PER_PAGE = 2;
+
 exports.getProducts = (req, res, next) => {
+    const page = req.query.page ? +req.query.page : 1;
+
+    let totalProducts;
+
     Product.find()
-        .populate('userId')
-        .then((products) => {
-            res.render('shop/product-list', {
-                products,
-                pageTitle: "All products",
-                path: "/products"
-            });
+        .countDocuments()
+        .then(productsCount => {
+            totalProducts = productsCount;
+
+            return Product.find()
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                .populate('userId')
+                .then((products) => {
+                    res.render('shop/product-list', {
+                        products,
+                        pageTitle: "All products",
+                        path: "/products",
+                        currentPage: page,
+                        hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
+                        hasPreviousPage: page > 1,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE)
+                    });
+                });
         })
         .catch((error) => {
             const err = new Error(error);
@@ -45,14 +65,32 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+    const page = req.query.page ? +req.query.page : 1;
+
+    let totalProducts;
+
     Product.find()
-        .populate('userId')
-        .then((products) => {
-            res.render('shop/index', {
-                products,
-                pageTitle: "Shop",
-                path: "/"
-            });
+        .countDocuments()
+        .then(productsCount => {
+            totalProducts = productsCount;
+
+            return Product.find()
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                .populate('userId')
+                .then((products) => {
+                    res.render('shop/index', {
+                        products,
+                        pageTitle: "Shop",
+                        path: "/",
+                        currentPage: page,
+                        hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
+                        hasPreviousPage: page > 1,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE)
+                    });
+                });
         })
         .catch((error) => {
             const err = new Error(error);
@@ -60,7 +98,6 @@ exports.getIndex = (req, res, next) => {
 
             return next(err);
         });
-
 };
 
 exports.getCart = (req, res, next) => {
