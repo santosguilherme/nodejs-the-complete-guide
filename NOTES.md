@@ -17,7 +17,8 @@ Useful resources:
 
 - Node MySQL2: Learn more about the Node MySQL Package: https://github.com/sidorares/node-mysql2
 - Sequelize: Official Docs: http://docs.sequelizejs.com/
-- When using Sequelize, the official docs describe how to add pagination: https://sequelize.org/master/manual/model-querying-basics.html
+- When using Sequelize, the official docs describe how to add
+  pagination: https://sequelize.org/master/manual/model-querying-basics.html
 - MongoDB NodeJS Driver: https://github.com/mongodb/node-mongodb-native
 - Mongoose Official Docs: https://mongoosejs.com/docs/
 
@@ -64,6 +65,7 @@ And most importantly, the general principle explained in this course is package 
 - Validator.js (which is used behind the scenes) Docs: https://github.com/chriso/validator.js
 
 ## Error Handling
+
 - Error Handling in Express.js - Official Docs: https://expressjs.com/en/guide/error-handling.html
 - HTTP Status: https://httpstatuses.com/
 
@@ -72,3 +74,7 @@ And most importantly, the general principle explained in this course is package 
 - Multer Official Docs: https://github.com/expressjs/multer
 - Streaming Files: https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-know-c9141306be93
 - Generating PDFs with PDFKit: http://pdfkit.org/docs/getting_started.html
+
+## Payments
+
+- Official Stripe.js Docs: https://stripe.com/docs
