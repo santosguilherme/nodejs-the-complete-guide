@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 
 const mongoConnection = require("./util/database");
+const socket = require("./socket")
 const feedRoutes = require("./routes/feed");
 const authRoutes = require("./routes/auth");
 
@@ -51,6 +52,12 @@ app.use((error, req, res, next) => {
 
 mongoConnection
     .then(() => {
-        app.listen(8080);
+        const server = app.listen(8080);
+
+        const io = socket.init(server);
+
+        io.on('connection', () => {
+            console.log('Client connected!');
+        });
     })
     .catch(console.error);

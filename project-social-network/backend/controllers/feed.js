@@ -3,9 +3,9 @@ const path = require("path");
 
 const {validationResult} = require("express-validator");
 
+const socket = require('../socket');
 const Post = require("../models/post");
 const User = require("../models/user");
-const tty = require("tty");
 
 exports.getPosts = async (req, res, next) => {
     const {page = 1} = req.query;
@@ -15,6 +15,7 @@ exports.getPosts = async (req, res, next) => {
         const totalItems = await Post.find().countDocuments();
         const posts = await Post.find()
             .populate('creator')
+            .sort({createdAt: -1})
             .skip((page - 1) * perPage)
             .limit(perPage);
 
@@ -85,6 +86,11 @@ exports.createPost = async (req, res, next) => {
 
         const {_id, name} = user;
 
+        socket.getIO().emit('posts', {
+            action: 'create',
+            post: {...post._doc, creator: {_id: req.userId, name: user.name}}
+        });
+
         res.status(201).json({
             message: 'Post created!',
             post,
@@ -124,8 +130,7 @@ exports.updatePost = async (req, res, next) => {
     }
 
     try {
-        const post = await Post.findById(postId);
-
+        const post = await Post.findById(postId).populate('creator');
         if (!post) {
             const error = new Error('Could not find the post!');
             error.statusCode = 404;
@@ -149,6 +154,11 @@ exports.updatePost = async (req, res, next) => {
         });
 
         await post.save();
+
+        socket.getIO().emit('posts', {
+            action: 'update',
+            post
+        });
 
         res.status(200).json({post});
     } catch (error) {
@@ -186,6 +196,11 @@ exports.deletePost = async (req, res, next) => {
         user.posts.pull(postId);
 
         await user.save();
+
+        socket.getIO().emit('posts', {
+            action: 'delete',
+            post: postId
+        });
 
         res.status(200).json({message: 'Post deleted!'});
     } catch (error) {

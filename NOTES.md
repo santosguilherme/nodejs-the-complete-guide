@@ -78,3 +78,8 @@ And most importantly, the general principle explained in this course is package 
 ## Payments
 
 - Official Stripe.js Docs: https://stripe.com/docs
+
+## Websocket
+
+- Socket.io Official Docs: https://socket.io/get-started/chat/
+- Alternative Websocket Library: https://www.npmjs.com/package/express-ws
