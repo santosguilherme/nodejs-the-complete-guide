@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const path = require("path");
+const fs = require("fs");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -9,6 +10,9 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 
 const errorController = require("./controllers/error");
 const adminRoutes = require("./routes/admin");
@@ -37,9 +41,17 @@ const fileFilter = (req, file, cb) => {
     cb(null, isImage);
 };
 
+const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    {flags: 'a'}
+);
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -87,6 +99,6 @@ app.use((error, req, res, next) => {
 
 mongooseConnection
     .then(() => {
-        app.listen(3000);
+        app.listen(process.env.PORT || 3000);
     })
     .catch(console.error);

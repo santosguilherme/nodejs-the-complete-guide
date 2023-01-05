@@ -87,3 +87,6 @@ And most importantly, the general principle explained in this course is package 
 ## GraphQL
 
 - Detailed Guide on GraphQL: https://graphql.org
+
+## Logging
+- https://blog.risingstack.com/node-js-logging-tutorial/
