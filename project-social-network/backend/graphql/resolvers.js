@@ -178,8 +178,6 @@ module.exports = {
         post.title = title;
         post.content = content;
 
-        console.log("imageUrl");
-
         if (imageUrl !== 'undefined') {
             post.imageUrl = imageUrl;
         }
