@@ -83,3 +83,7 @@ And most importantly, the general principle explained in this course is package 
 
 - Socket.io Official Docs: https://socket.io/get-started/chat/
 - Alternative Websocket Library: https://www.npmjs.com/package/express-ws
+
+## GraphQL
+
+- Detailed Guide on GraphQL: https://graphql.org
