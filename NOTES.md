@@ -90,3 +90,8 @@ And most importantly, the general principle explained in this course is package 
 
 ## Logging
 - https://blog.risingstack.com/node-js-logging-tutorial/
+
+## Testing
+- Mocha: https://mochajs.org/
+- Chai: https://www.chaijs.com/
+- Sinon: https://sinonjs.org/
